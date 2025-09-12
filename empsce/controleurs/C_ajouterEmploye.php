@@ -6,6 +6,7 @@ class C_ajouterEmploye
     private $data;
     private $modeleEmploye;
     private $controleurMenu;
+    
     public function __construct()
     {
         $this->data = array();
