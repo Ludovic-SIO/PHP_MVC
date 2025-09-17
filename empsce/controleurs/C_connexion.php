@@ -1,23 +1,14 @@
 <?php
-require_once "C_menu.php";
+
+require_once __DIR__ . '/../modeles/M_utilisateur.php';
+
 
 class C_connexion {
     private $pdo;
 
     public function __construct() 
     {
-       
-        try 
-        {
-            $dsn = "mysql:host=localhost;dbname=empsce1;charset=utf8";
-            $this->pdo = new PDO($dsn, "root", "");
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } 
-        catch (PDOException $e) 
-        {
-            echo("Échec lors de la connexion : " . $e->getMessage());
-        }
-
+        $this->pdo = new M_utilisateur();
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -36,10 +27,7 @@ class C_connexion {
             return;
         }
 
-        
-        $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE login = :login");
-        $stmt->execute(['login' => $login]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $this->pdo->getUtilisateurParLogin($login);
 
         if ($user) {
             if (password_verify($mdp, $user['mdp'])) {

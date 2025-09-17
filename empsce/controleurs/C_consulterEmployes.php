@@ -38,8 +38,9 @@ class C_consulterEmployes
     {
         $this->controleurMenu->FillData($this->data);
         $employe = $this->modeleEmploye->GetEmploye($matricule);
-        if (!$employe) {
-            die("Employé non trouvé");
+        if (!$employe) 
+        {
+            echo("Employé non trouvé");
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

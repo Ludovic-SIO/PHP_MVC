@@ -1,69 +1,38 @@
 <?php
 class M_utilisateur {
-    private $connexion;
+    private $pdo;
 
-    public function __construct() {
-        $this->connexion = new mysqli('localhost', 'root', '', 'emp_sce1');
-        if ($this->connexion->connect_error) {
-            die("Erreur de connexion : " . $this->connexion->connect_error);
-        }
-        $this->connexion->set_charset("utf8");
-    }
-
-    public function ajouterUtilisateur($login, $mdp) {
-        $login_sanitized = $this->connexion->real_escape_string($login);
-        $mdp_hashed = hash('sha256', $mdp);
-
-        $sql = "INSERT INTO utilisateur (login, mdp) VALUES ('$login_sanitized', '$mdp_hashed')";
-        return $this->connexion->query($sql);
-    }
-
-    public function verifierUtilisateur($login, $mdp) {
-        $login_sanitized = $this->connexion->real_escape_string($login);
-        $mdp_hashed = hash('sha256', $mdp);
-
-        $sql = "SELECT * FROM utilisateur WHERE login='$login_sanitized' AND mdp='$mdp_hashed'";
-        $result = $this->connexion->query($sql);
-        return $result->num_rows === 1;
-    }
-
-    public function isLoggedON()
+    public function __construct() 
     {
-        try {
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-              $nom_utilisateur = $_POST['nom_utilisateur'];
-              $mot_de_passe = $_POST['mot_de_passe'];
-          
-              $stmt = $conn->prepare("SELECT * FROM utilisateur WHERE nom_utilisateur = ?");
-              $stmt->bind_param("s", $nom_utilisateur);
-              $stmt->execute();
-              $result = $stmt->get_result();
-          
-              if ($result->num_rows > 0) {
-                  $row = $result->fetch_assoc();
-                  
-
-                  if (password_verify($mot_de_passe, $row['Mot_de_passe'])) {
-                    $_SESSION['pseudoU'] = $nom_utilisateur;
-                    $_SESSION['id_utilisateur'] = $row['id_utilisateur']; 
-                    $message = "<script>alert('Connexion réussie !'); window.location.href='accueil.php';</script>";
-                }
-                 else {
-                      $message = "<script>alert('Mot de passe incorrect');</script>";
-                  }
-              } else {
-                  $message = "<script>alert('Nom d\'utilisateur incorrect');</script>";
-              }
-              
-          }
-          }
-          
-          
-          catch(exeption $e){
-            $message = "<script>alert('une erreur c'est produite veuillez réessayer plus tard !'); window.location.href='accueil.php';</script>";
-          
-            }
-        
+        try 
+        {
+            $dsn = "mysql:host=localhost;dbname=empsce1;charset=utf8";
+            $this->pdo = new PDO($dsn, "root", "");
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } 
+        catch (PDOException $e) 
+        {
+            echo("Échec lors de la connexion : " . $e->getMessage());
+        }
     }
+
+    public function getUtilisateurParLogin($login) {
+        $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE login = :login");
+        $stmt->execute(['login' => $login]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function utilisateurExiste($login) {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM utilisateur WHERE login = :login");
+        $stmt->execute(['login' => $login]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function ajouterUtilisateur($login, $mdp_hashed) {
+        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (login, mdp) VALUES (:login, :mdp)");
+        return $stmt->execute(['login' => $login, 'mdp' => $mdp_hashed]);
+    }
+    
+    
 }
 ?>

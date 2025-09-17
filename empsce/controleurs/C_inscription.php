@@ -1,22 +1,18 @@
 <?php
 require_once "C_menu.php";
+require_once __DIR__ . '/../modeles/M_utilisateur.php';
 
 class C_inscription
 {
     private $data;
     private $controleurMenu;
-    private $idConnexion;
+    private $modelUtilisateur;
 
     public function __construct()
     {
         $this->data = array();
         $this->controleurMenu = new C_menu();
-
-        $this->idConnexion = mysqli_connect('localhost', 'root', '', 'empsce1');
-        if (!$this->idConnexion) {
-            die("Erreur de connexion à la base de données");
-        }
-        mysqli_set_charset($this->idConnexion, "utf8");
+        $this->modelUtilisateur = new M_utilisateur();
 
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -32,41 +28,28 @@ class C_inscription
     public function action_ajouterUtilisateur($login, $mdp, $mdpConf)
     {
         $this->controleurMenu->FillData($this->data);
-    
+
         if ($mdp !== $mdpConf) {
             $this->data['leMessage'] = "Les mots de passe ne correspondent pas.";
             require_once "vues/v_message.php";
             return;
         }
-    
-        $login_sanitized = mysqli_real_escape_string($this->idConnexion, $login);
-    
-        $sqlCheck = "SELECT * FROM utilisateur WHERE login = '$login_sanitized'";
-        $resultCheck = mysqli_query($this->idConnexion, $sqlCheck);
-    
-        if (mysqli_num_rows($resultCheck) > 0) {
+
+        if ($this->modelUtilisateur->utilisateurExiste($login)) {
             $this->data['leMessage'] = "Ce login est déjà utilisé.";
             require_once "vues/v_message.php";
             return;
         }
-    
+
         $mdp_hashed = password_hash($mdp, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO utilisateur (login, mdp) VALUES ('$login_sanitized', '$mdp_hashed')";
-        $result = mysqli_query($this->idConnexion, $sql);
-    
-        if ($result) {
-            $this->data['leMessage'] = "Inscription réussie, vous allez être redirigé vers la page de connexion.";
+        if ($this->modelUtilisateur->ajouterUtilisateur($login, $mdp_hashed)) {
             header("Location: index.php?page=connexion");
             exit();
-        } 
-        else 
-        {
+        } else {
             $this->data['leMessage'] = "Erreur lors de l'enregistrement.";
             require_once "vues/v_message.php";
         }
     }
-    
 }
 ?>
-
