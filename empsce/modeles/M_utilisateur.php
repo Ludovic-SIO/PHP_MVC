@@ -17,22 +17,24 @@ class M_utilisateur {
     }
 
     public function getUtilisateurParLogin($login) {
-        $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE login = :login");
-        $stmt->execute(['login' => $login]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $res = $this->pdo->prepare("SELECT * FROM utilisateur WHERE login = :login");
+        $res->bindValue(':login', $login, PDO::PARAM_STR);
+        $res->execute();
+        return $res->fetch(PDO::FETCH_ASSOC);
     }
 
     public function utilisateurExiste($login) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM utilisateur WHERE login = :login");
-        $stmt->execute(['login' => $login]);
-        return $stmt->fetchColumn() > 0;
+        $res = $this->pdo->prepare("SELECT COUNT(*) FROM utilisateur WHERE login = :login");
+        $res->bindValue(':login', $login, PDO::PARAM_STR);
+        $res->execute();
+        return $res->fetchColumn() > 0;
     }
 
     public function ajouterUtilisateur($login, $mdp_hashed) {
-        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (login, mdp) VALUES (:login, :mdp)");
-        return $stmt->execute(['login' => $login, 'mdp' => $mdp_hashed]);
+        $res = $this->pdo->prepare("INSERT INTO utilisateur (login, mdp) VALUES (:login, :mdp)");
+        $res->bindValue(':login', $login, PDO::PARAM_STR);
+        $res->bindValue(':mdp', $mdp_hashed, PDO::PARAM_STR);
+        return $res->execute();
     }
-    
-    
 }
 ?>
