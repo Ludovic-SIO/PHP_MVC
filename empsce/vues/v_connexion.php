@@ -27,7 +27,7 @@
             <input type="password" class="form-control" id="mdp" name="mdp" required />
         </div>
 
-        <button type="submit" class="btn btn-primary">Se Connecter </button>
+        <button type="submit" class="btn btn-success">Se Connecter </button>
     </form>
 </div>
 

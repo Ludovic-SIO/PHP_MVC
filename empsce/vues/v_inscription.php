@@ -29,7 +29,7 @@
             <input type="password" class="form-control" id="mdpConf" name="mdpConf" required />
         </div>
 
-        <button type="submit" class="btn btn-primary">S'inscrire</button>
+        <button type="submit" class="btn btn-success">S'inscrire</button>
     </form>
 </div>
 

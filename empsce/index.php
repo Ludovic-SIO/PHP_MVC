@@ -3,8 +3,10 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once "controleurs/C_connexion.php";  // On la charge une seule fois ici
-$auth = new C_connexion(); // On crée une seule instance pour tout le routeur
+require_once "controleurs/C_connexion.php";  
+$auth = new C_connexion(); 
+
+
 
 $page = $_GET['page'] ?? 'login';
 
@@ -56,7 +58,7 @@ switch ($page) {
             $mdp = $_POST['mdp'] ?? '';
             $auth->action_login($login, $mdp);
         } else {
-            $auth->action_afficher();  // affiche v_connexion.php
+            $auth->action_afficher(); 
         }
         break;
     
@@ -92,6 +94,49 @@ switch ($page) {
         header("Location: index.php?page=login");
         exit();
         break;
+
+    case "modifierEmploye":
+        if (!$auth->isLoggedOn()) 
+        {
+            header("Location: index.php?page=connexion");
+            exit();
+        }
+        require_once "controleurs/C_modifierEmploye.php";
+        $controleur = new C_modifierEmploye();
+        $matricule = $_GET['matricule'] ?? null;
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                
+            $nom = $_POST['nom'] ?? '';
+            $prenom = $_POST['prenom'] ?? '';
+            $service = $_POST['service'] ?? '';
+            $controleur->action_modifier($matricule, $nom, $prenom, $service);
+            } else {
+           
+                if ($matricule) {
+                    $controleur->action_afficherFormulaire($matricule);
+                } else {
+                    echo "Matricule manquant.";
+                }
+            }
+            break;
+        
+        case "supprimerEmploye":
+            if (!$auth->isLoggedOn()) {
+                header("Location: index.php?page=connexion");
+                exit();
+            }
+            require_once "controleurs/C_supprimerEmploye.php";
+            $controleur = new C_supprimerEmploye();
+        
+            $matricule = $_GET['matricule'] ?? null;
+            if ($matricule) {
+                $controleur->action_supprimer($matricule);
+            } else {
+                echo "Matricule manquant.";
+            }
+            break;
+        
         
 
     case "login":

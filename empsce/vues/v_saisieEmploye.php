@@ -50,7 +50,7 @@
 
         <br />
 
-        <input type="submit" class="btn btn-primary" value="Enregistrer" />
+        <input type="submit" class="btn btn-success" value="Enregistrer" />
     </form>
 </div>
 

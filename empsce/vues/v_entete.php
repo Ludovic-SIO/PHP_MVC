@@ -13,12 +13,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU®Gzau9q]J11fW4pNL1hNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN95405Q"
         crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
 <body>
 
 <header>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success mb-3">
     <div class="container-fluid">
 
       <a class="navbar-brand fw-bold fs-4" href="index.php?page=accueil">Gestion Personnel</a>
@@ -33,11 +34,11 @@
 
 
           <li class="nav-item">
-            <a class="nav-link fs-5" href="index.php?page=saisieEmploye">Ajouter un employé</a>
+            <a class="navbar-brand  fs-5" href="index.php?page=saisieEmploye">Ajouter un employé</a>
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="navbar-brand  dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Liste des employés
             </a>
             <ul class="dropdown-menu">

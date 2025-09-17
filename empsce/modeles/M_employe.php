@@ -75,13 +75,49 @@
             $ok = mysqli_query($this->GetCnx(), $req);
         
             if (!$ok) {
-                $employe = null; // insertion échouée
+                $employe = null; 
             }
         
             $this->deconnexion();
             return $employe;
         }
         
+        public function ModifierEmploye($matricule, $nom, $prenom, $service)
+        {
+            $this->connexion();
+
+
+            $matricule = mysqli_real_escape_string($this->GetCnx(), $matricule);
+            $nom = mysqli_real_escape_string($this->GetCnx(), $nom);
+            $prenom = mysqli_real_escape_string($this->GetCnx(), $prenom);
+            $service = mysqli_real_escape_string($this->GetCnx(), $service);
+
+            $req = "UPDATE employe SET 
+                        emp_nom = '$nom', 
+                        emp_prenom = '$prenom', 
+                        emp_service = '$service' 
+                    WHERE emp_matricule = '$matricule'";
+
+            $ok = mysqli_query($this->GetCnx(), $req);
+
+            $this->deconnexion();
+            return $ok;
+        }
+
+        public function SupprimerEmploye($matricule)
+        {
+            $this->connexion();
+
+            $matricule = mysqli_real_escape_string($this->GetCnx(), $matricule);
+
+            $req = "DELETE FROM employe WHERE emp_matricule = '$matricule'";
+
+            $ok = mysqli_query($this->GetCnx(), $req);
+
+            $this->deconnexion();
+            return $ok;
+        }
+
         
     }
 ?>

@@ -14,12 +14,18 @@
     integrity="sha384-ndDqU®Gzau9q]J11fW4pNL1hNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN95405Q"
     crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="style.css" />
+
+
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="d-grid gap-3" style="width: 315px;">
-            <a class="btn btn-primary btn-lg" href="index.php?page=connexion" role="button">Connexion</a>
-            <a class="btn btn-primary btn-lg" href="index.php?page=inscription" role="button">Inscription</a>
+            
+            <a class="btn btn-success btn-lg" href="index.php?page=connexion" role="button">Connexion</a>
+            <a class="btn btn-success btn-lg" href="index.php?page=inscription" role="button">Inscription</a>
             
         </div>
         <?php include_once('v_piedPage.php'); ?>

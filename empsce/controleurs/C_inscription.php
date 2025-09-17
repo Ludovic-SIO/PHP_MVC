@@ -50,7 +50,8 @@ class C_inscription
             return;
         }
     
-        $mdp_hashed = password_hash('sha256', $mdp);
+        $mdp_hashed = password_hash($mdp, PASSWORD_DEFAULT);
+
         $sql = "INSERT INTO utilisateur (login, mdp) VALUES ('$login_sanitized', '$mdp_hashed')";
         $result = mysqli_query($this->idConnexion, $sql);
     
